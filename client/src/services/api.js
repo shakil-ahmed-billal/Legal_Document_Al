@@ -1,7 +1,8 @@
 // Define the API base URL from Vite's environment variables or fallback to localhost
 // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://server-legal-doc.vercel.app';
+
 
 // API Error class to handle errors consistently
 class ApiError extends Error {
