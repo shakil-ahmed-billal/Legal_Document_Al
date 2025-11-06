@@ -1,5 +1,6 @@
 "use client";
 
+import useAxiosPublic from '@/hooks/useAxiosPublic';
 import axios from 'axios';
 import { FileText, Plus, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,8 @@ export default function DocumentManager({ isOpen, onClose }) {
         category: 'general',
     });
 
+    const axiosPublic = useAxiosPublic();
+
     useEffect(() => {
         if (isOpen) {
             loadDocuments();
@@ -25,7 +28,7 @@ export default function DocumentManager({ isOpen, onClose }) {
         try {
             setLoading(true);
             //   const response = await getDocuments();
-            const response = await axios.get('http://localhost:8000/documents');
+            const response = await axiosPublic.get('/documents');
             console.log(response)
             setDocuments(response.data.data || []);
         } catch (error) {
@@ -38,7 +41,7 @@ export default function DocumentManager({ isOpen, onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/documents', formData);
+            await axiosPublic.post('/documents', formData)
 
             setFormData({
                 title: '',
@@ -58,7 +61,7 @@ export default function DocumentManager({ isOpen, onClose }) {
         if (!confirm('Are you sure you want to delete this document?')) return;
 
         try {
-            await axios.delete(`http://localhost:8000/documents/${id}`);
+            await axiosPublic.delete(`/documents/${id}`);
             loadDocuments();
         } catch (error) {
             console.error('Error deleting document:', error);
