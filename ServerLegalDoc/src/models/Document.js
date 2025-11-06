@@ -77,6 +77,16 @@ class Document {
       throw error;
     }
   }
+
+  // Delete a document by its ID
+  static async deleteDocument(id) {
+    try {
+      await LegalDocument.findByIdAndDelete(id); // delete document by ID
+    } catch (error) {
+      console.error('Error deleting document:', error);
+      throw error;
+    }
+  }
 }
 
 export default Document;

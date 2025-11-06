@@ -9,8 +9,8 @@ export function SearchBar({ query, onQueryChange, onSubmit, isLoading }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-4xl">
-      <div className="relative">
+    <form onSubmit={handleSubmit} className="w-12/12 ">
+      <div className="relative ">
         <input
           type="text"
           value={query}

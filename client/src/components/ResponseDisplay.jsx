@@ -4,7 +4,7 @@ import { FileText, CheckCircle } from 'lucide-react';
 
 export function ResponseDisplay({ answer, sourceDocuments }) {
   return (
-    <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8 animate-fadeIn">
+    <div className="w-full bg-white rounded-lg shadow-lg p-8 animate-fadeIn">
       <div className="flex items-center gap-2 mb-4 text-green-600">
         <CheckCircle size={24} />
         <h2 className="text-xl font-semibold">Response</h2>

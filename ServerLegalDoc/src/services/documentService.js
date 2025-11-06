@@ -40,6 +40,10 @@ class DocumentService {
     return await Document.createDocument(title, content, category);
   }
 
+  static async deleteDocument(id) {
+    return await Document.deleteDocument(id);
+  }
+  
   static async initializeMockDocuments() {
     const existingDocs = await Document.getAllDocuments();
 
