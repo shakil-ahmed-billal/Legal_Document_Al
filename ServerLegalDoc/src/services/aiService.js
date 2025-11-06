@@ -1,90 +1,106 @@
-import dotenv from 'dotenv';
-import { OpenAI } from 'openai';
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 
-dotenv.config();
+const axiosPublic = useAxiosPublic();
 
-const openaiApiKey = process.env.OPENAI_API_KEY;
-const client = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null;
 
-class AIService {
-  static async generateResponse(query, documents) {
-    if (!client) {
-      return this.generateFallbackResponse(query, documents);
-    }
-
-    try {
-      const context = documents
-        .map((doc) => `Document: ${doc.title}\nContent: ${doc.content}`)
-        .join('\n\n');
-
-      const prompt = `You are a legal document assistant. Based on the following legal documents, answer the user's query concisely and accurately. Cite specific sections when relevant.
-
-Legal Documents:
-${context}
-
-User Query: ${query}
-
-Provide a clear, professional response referencing the relevant document sections.`;
-
-      const response = await client.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful legal document assistant.',
-          },
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
-        max_tokens: 500,
-        temperature: 0.7,
-      });
-
-      return response.choices[0].message.content.trim();
-    } catch (error) {
-      console.error('AI generation error:', error);
-      return this.generateFallbackResponse(query, documents);
-    }
-  }
-
-  static generateFallbackResponse(query, documents) {
-    const queryLower = query.toLowerCase();
-    const responses = [];
-
-    for (const doc of documents) {
-      const docLines = doc.content
-        .split('\n')
-        .map((line) => line.trim())
-        .filter((line) => line.length > 0);
-
-      for (let i = 0; i < docLines.length; i++) {
-        const line = docLines[i];
-        const lineLower = line.toLowerCase();
-        const queryWords = queryLower
-          .split(' ')
-          .filter((word) => word.length > 3);
-
-        if (queryWords.some((word) => lineLower.includes(word))) {
-          const contextStart = Math.max(0, i - 1);
-          const contextEnd = Math.min(docLines.length, i + 3);
-          const context = docLines.slice(contextStart, contextEnd).join('\n');
-
-          responses.push(`From '${doc.title}':\n${context}`);
-          break;
-        }
-      }
-    }
-
-    if (responses.length > 0) {
-      return `Based on the relevant legal documents:\n\n${responses.join('\n\n')}`;
-    }
-
-    return `I found the following documents that may be relevant to your query about "${query}":\n\n${documents
-      .map((doc) => `- ${doc.title}`)
-      .join('\n')}\n\nFor specific information, please rephrase your query with more details about what you'd like to know.`;
+class ApiError extends Error {
+  constructor(message, statusCode, details) {
+    super(message);
+    this.name = "ApiError";
+    this.statusCode = statusCode || 500;
+    this.details = details || null;
   }
 }
 
-export default AIService;
+
+export async function queryLegalDocuments(query) {
+  try {
+    if (!query || query.trim() === "") {
+      throw new ApiError("Query text cannot be empty", 400);
+    }
+
+    const response = await axiosPublic.post(`/generate`, { query });
+
+    if (response.status !== 200) {
+      throw new ApiError(
+        "Failed to fetch legal documents",
+        response.status,
+        response.data?.message
+      );
+    }
+
+    const data = response.data;
+
+    // Handle unsuccessful API responses
+    if (!data.success) {
+      throw new ApiError(
+        data.message || "Query was not successful",
+        response.status,
+        data
+      );
+    }
+
+    console.log("Legal Document Response:", data);
+    return data;
+  } catch (error) {
+    console.error("Error in queryLegalDocuments:", error);
+
+    if (error.response) {
+      throw new ApiError(
+        error.response.data?.message || "Server responded with an error",
+        error.response.status,
+        error.response.data
+      );
+    } else if (error.request) {
+      throw new ApiError(
+        "No response received from the server",
+        503,
+        "Please check your network or server connection."
+      );
+    } else if (error instanceof ApiError) {
+      throw error;
+    } else {
+      throw new ApiError(
+        error.message || "Unexpected error occurred",
+        500,
+        error.stack
+      );
+    }
+  }
+}
+
+
+export async function checkHealth() {
+  try {
+    const response = await axiosPublic.get(`/health`);
+
+    if (response.status === 200) {
+      console.log("Server Health:", response.data);
+      return response.data;
+    }
+
+    throw new ApiError(
+      "Server health check failed",
+      response.status,
+      response.data
+    );
+  } catch (error) {
+    console.error("Health Check Failed:", error);
+
+    if (error.response) {
+      throw new ApiError(
+        "Health endpoint returned an error",
+        error.response.status,
+        error.response.data
+      );
+    } else if (error.request) {
+      throw new ApiError(
+        "No response from the server",
+        503,
+        "Please ensure the backend is running."
+      );
+    } else {
+      throw new ApiError("Unknown error occurred during health check", 500);
+    }
+  }
+}
