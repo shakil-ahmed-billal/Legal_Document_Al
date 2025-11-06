@@ -98,6 +98,23 @@ class DocumentController {
       });
     }
   }
+  static async deleteDocument(req, res) {
+    try {
+      const { id } = req.params;
+      await DocumentService.deleteDocument(id); // Delete document by ID
+      res.json({
+        success: true,
+        message: 'Document deleted successfully',
+      });
+    } catch (error) {
+      console.error('Error in deleteDocument:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to delete document',
+        detail: error.message,
+      });
+    }
+  }
 }
 
 export default DocumentController;
