@@ -106,9 +106,9 @@ An AI-powered legal document search portal that allows users to query legal docu
    ```
 
 4. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - Health Check: http://localhost:8000/health
+   - Frontend: https://legal-document-al-4gaq.vercel.app
+   - Backend API: https://server-legal-doc.vercel.app/
+   - Health Check: https://server-legal-doc.vercel.app/health
 
 ### Option 2: Local Development
 
