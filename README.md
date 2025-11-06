@@ -1,6 +1,6 @@
 # Legal Document Search Portal
 
-An AI-powered legal document search portal that allows users to query legal documents using natural language. Built with Node.js/Express backend (MVC pattern), MongoDB database, and React frontend.
+An AI-powered legal document search portal that allows users to query legal documents using natural language. Built with Node.js/Express backend (MVC pattern), MongoDB database, and React or Next.js frontend.
 
 ## Features
 
@@ -11,13 +11,14 @@ An AI-powered legal document search portal that allows users to query legal docu
 - RESTful API with proper error handling
 - MVC architecture for scalable backend
 - MongoDB integration for data persistence
-- Docker support for easy deployment
+- Vercel for deployment
 - Query logging and analytics
 
 ## Technology Stack
 
 ### Frontend
 - React 18.3
+- Next.js
 - TypeScript
 - Vite
 - Tailwind CSS
@@ -58,7 +59,7 @@ An AI-powered legal document search portal that allows users to query legal docu
 │   │   └── server.js                 # Express app & server setup
 │   ├── package.json
 │   ├── .env.example
-│   └── Dockerfile
+│  
 ├── src/
 │   ├── components/                   # React components
 │   │   ├── Header.tsx
@@ -70,21 +71,17 @@ An AI-powered legal document search portal that allows users to query legal docu
 │   │   └── api.ts                    # API integration layer
 │   ├── App.tsx                       # Main application component
 │   └── main.tsx                      # Application entry point
-├── docker-compose.yml                # Docker Compose configuration
-├── Dockerfile                        # Frontend Docker configuration
 └── README.md                         # This file
 ```
 
 ## Prerequisites
 
 - Node.js 20+ (for local development)
-- Docker and Docker Compose (for containerized deployment)
+- Vercel CLI (for deployment)
 - MongoDB account (for database)
 - OpenAI API key (optional - fallback responses work without it)
 
 ## Setup Instructions
-
-### Option 1: Docker (Recommended)
 
 1. **Clone the repository**
    ```bash
@@ -103,9 +100,9 @@ An AI-powered legal document search portal that allows users to query legal docu
    OPENAI_API_KEY=your_openai_api_key_here
    ```
 
-3. **Run with Docker Compose**
+3. **Verify environment variables**
    ```bash
-   docker-compose up --build
+   cat .env
    ```
 
 4. **Access the application**
@@ -179,6 +176,7 @@ The backend follows the Model-View-Controller (MVC) pattern for clean code organ
   - `getDocumentById(id)` - Fetch specific document
   - `createDocument(title, content, category)` - Create new document
   - `searchDocuments(query)` - Search documents by query
+  - `deleteDocument(id)` - Delete specific document
 
 - **Query.js** - Manages query logs
   - `logQuery(queryText, response, sourceDocuments)` - Store query records
@@ -200,6 +198,7 @@ The backend follows the Model-View-Controller (MVC) pattern for clean code organ
   - `getAllDocuments()` - List all documents
   - `getDocumentById()` - Get specific document
   - `createDocument()` - Create new document
+  - `deleteDocument()` - Delete specific document
 
 ### Routes (`src/routes/`)
 - **documentRoutes.js** - API endpoint definitions
@@ -295,6 +294,16 @@ Health check endpoint
 }
 ```
 
+### DELETE /documents/:id
+Delete a legal document by ID
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Document deleted successfully"
+}
+
 ## Database Schema
 
 ### legal_documents table
@@ -381,11 +390,6 @@ No build step needed. Ensure dependencies are installed:
 cd backend && npm install
 ```
 
-### Docker Production Build
-```bash
-docker-compose up --build -d
-```
-
 ## Environment Variables
 
 ### Frontend (.env)
@@ -432,11 +436,6 @@ The application can be tested by:
 - Verify CORS is enabled (it is by default)
 - Check network connectivity
 
-### Docker issues
-- Ensure Docker and Docker Compose are installed
-- Check that ports 3000 and 8000 are available
-- Try `docker-compose down` and `docker-compose up --build`
-- Check Docker logs: `docker-compose logs -f`
 
 ### Database connection errors
 - Verify MongoDB credentials are correct
@@ -483,6 +482,6 @@ This project is for educational purposes as part of the FSD-AAI assignment.
 - OpenAI for GPT API
 - Express.js framework
 - MongoDB for database backend
-- React and Vite teams
+- React and Next.js for frontend
 - Tailwind CSS
 - Lucide React icons
