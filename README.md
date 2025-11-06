@@ -27,12 +27,12 @@ An AI-powered legal document search portal that allows users to query legal docu
 ### Backend
 - Node.js 20+
 - Express.js
-- MongoDB (PostgreSQL)
+- MongoDB (Mongoose)
 - OpenAI API (GPT-3.5-turbo)
 - MVC Architecture
 
 ### Database
-- MongoDB (PostgreSQL)
+- MongoDB (Mongoose)
 - Full-text search support
 - Row-level security (RLS)
 
@@ -85,7 +85,7 @@ An AI-powered legal document search portal that allows users to query legal docu
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/shakil-ahmed-billal/Legal_Document_Al.git
    cd legal-document-search
    ```
 
@@ -106,9 +106,9 @@ An AI-powered legal document search portal that allows users to query legal docu
    ```
 
 4. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - Health Check: http://localhost:8000/health
+   - Frontend: https://legal-document-al-4gaq.vercel.app
+   - Backend API: https://server-legal-doc.vercel.app/
+   - Health Check: https://server-legal-doc.vercel.app/health
 
 ### Option 2: Local Development
 
@@ -485,3 +485,9 @@ This project is for educational purposes as part of the FSD-AAI assignment.
 - React and Next.js for frontend
 - Tailwind CSS
 - Lucide React icons
+
+## Contact
+
+For any questions or feedback, please reach out to [Shakil Ahmed Billal](https://github.com/shakil-ahmed-billal).
+
+
