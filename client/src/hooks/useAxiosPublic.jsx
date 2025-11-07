@@ -1,14 +1,12 @@
-import axios from 'axios';
+import axios from "axios"
 
-// Axios instance setup
+
 const axiosPublic = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_LIVE_API_URL,
-  withCredentials: true,
-});
-
-// Custom hook for axiosPublic
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true
+})
 const useAxiosPublic = () => {
-  return axiosPublic;
-};
+  return axiosPublic
+}
 
-export default useAxiosPublic;
+export default useAxiosPublic
