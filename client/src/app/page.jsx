@@ -26,10 +26,13 @@ function Home() {
 
     try {
       const result = await queryLegalDocuments(query);
-      setResponse({
+      if(result){
+        setResponse({
         answer: result.answer,
         sourceDocuments: result.source_documents,
       });
+      setQuery('');
+      }
     } catch (err) {
       if (err) {
         setError(
